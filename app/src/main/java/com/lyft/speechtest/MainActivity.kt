@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
         }
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this)
         val intent = setupSpeech()
-        binding.button.setOnTouchListener { v, event ->
+        binding.button.setOnTouchListener { _, event ->
             if (event.action == MotionEvent.ACTION_UP) {
                 speechRecognizer.stopListening()
             }
@@ -117,7 +117,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onError(error: Int) {
-                Log.d("MainActivity", "onError=$error")
+                Log.w("MainActivity", "onError=$error")
                 // workaround for https://issuetracker.google.com/issues/37053152
                 if (error == SpeechRecognizer.ERROR_NO_MATCH && !isReadyForSpeechCalled) {
                     speechRecognizer.startListening(intent)
@@ -132,8 +132,8 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onResults(results: Bundle?) {
-                binding.button.setImageResource(android.R.drawable.presence_audio_online)
                 Log.d("MainActivity", "onResults")
+                binding.button.setImageResource(android.R.drawable.presence_audio_online)
                 val data = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
                 val scores = results?.getFloatArray(SpeechRecognizer.CONFIDENCE_SCORES)
                 binding.text.setText(
